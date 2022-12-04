@@ -1,11 +1,20 @@
+{% load db_tags %}
 <!doctype html>
 <html>
 <head>
-<title>NBA DB BROWSER</title>
+	{% if title %}
+		<title> Django NBA - {{ title }}</title>
+	{% else %}
+		<title> Django NBA </title>
+	{% endif %}
 <meta name="description" content="Auto Generated DB Browser">
 <meta name="keywords" content="Tabs will be created for each of your tables in the db.">
 </head>
 <body>
-Content goes here.
+	{% load return_item %}
+	{% for field in fields %}
+		<h1> {{ field }} </h1>
+		<p> {{ data|returnitem:field }} </p>
+	{% endfor %}
 </body>
 </html>
