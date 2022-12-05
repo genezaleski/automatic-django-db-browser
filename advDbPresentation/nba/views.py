@@ -4,7 +4,8 @@ from modules.fetchDBDict import fetch
 
 db = fetch("nba","Team")
 
-# Create your views here.
+
+# Create your views here. 
 def home(request):
 	context = {
 		'data': db,

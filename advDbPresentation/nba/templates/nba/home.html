@@ -9,12 +9,56 @@
 	{% endif %}
 <meta name="description" content="Auto Generated DB Browser">
 <meta name="keywords" content="Tabs will be created for each of your tables in the db.">
+<script type="text/javascript">
+
+function filterTable(){
+
+var filter = document.getElementById("filter").value.toLowerCase();
+var table = document.getElementById("dbTable");
+for (var ii=1; ii < table.rows.length; ii++){
+	var row = table.rows[ii];
+	var found = false;
+	for (var jj=0, jj < row.cells.length; jj++){
+		var col = row.cells[jj];
+//		var val = col.innerHTML.toLowerCase();
+//		var result = val.includes(filter);
+//		if (result.includes(filter)) {
+//			found = true;
+//		}
+	}
+	if (found == false){
+		table.deleteRow(ii);
+	}
+}
+
+}
+</script>
 </head>
 <body>
-	{% load return_item %}
 	{% for field in fields %}
 		<h1> {{ field }} </h1>
-		<p> {{ data|returnitem:field }} </p>
+		<form action="javascript:filterTable()">
+			<label for="filter"> Filter Data: </label>
+			<input type="text" id="filter" name="filter">
+			<input type="submit" value="Submit"><br>
+		</form>
+		<table id="dbTable">
+		{% define data|returnitem:field as relData %}
+		{% define relData|returnitem:1 as header %}
+		{% define header|returnkeys as header %}
+		<tr>
+		{% for h in header %}
+			<th> {{ h }} </th>
+		{% endfor %}
+		</tr>
+		{% for item in relData %}
+			<tr> 
+				{% for h in header %}
+					<td> {{ item|returnitem:h }} </td>
+				{% endfor %}
+			<tr>
+		{% endfor %}
+		</table>
 	{% endfor %}
 </body>
 </html>
