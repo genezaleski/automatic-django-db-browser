@@ -1,0 +1,64 @@
+{% load db_tags %}
+<!doctype html>
+<html>
+<head>
+	{% if title %}
+		<title> Django NBA - {{ title }}</title>
+	{% else %}
+		<title> Django NBA </title>
+	{% endif %}
+<meta name="description" content="Auto Generated DB Browser">
+<meta name="keywords" content="Tabs will be created for each of your tables in the db.">
+<script type="text/javascript">
+
+function filterTable(){
+
+var table = document.getElementById("dbTable");
+var filter = document.getElementById("filter").value;
+
+var rows = table.rows;
+var i = rows.length;
+while (--i) {
+	var rowData = rows[i];
+	var found = false;
+	for (var jj=0; jj < rowData.cells.length; jj++){
+		var data = rowData.cells[jj].innerHTML;
+		if (data.includes(filter)){
+			found = true;
+		}
+	}
+	if (found == false){
+		rows[i].parentNode.removeChild(rows[i]);
+	}
+}
+
+}
+
+</script>
+</head>
+<body>
+	<h1> {{ field }} </h1>
+	<form action="javascript:filterTable()">
+		<label for="filter"> Filter Data: </label>
+		<input type="text" id="filter" name="filter">
+		<input type="submit" value="Submit"><br>
+	</form>
+	<table id="dbTable">
+	{% define data|returnitem:field as relData %}
+	{% define relData|returnitem:1 as header %}
+	{% define header|returnkeys as header %}
+	<tr>
+	{% for h in header %}
+		<th>{{ h }}</th>
+	{% endfor %}
+	</tr>
+	{% for item in relData %}
+		<tr> 
+			{% for h in header %}
+				<td>{{ item|returnitem:h }}</td>
+			{% endfor %}
+		</tr>
+	{% endfor %}
+	</table>
+</body>
+</html>

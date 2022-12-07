@@ -1,0 +1,28 @@
+{% extends "nba/home.html" %}
+{% block content %}
+	{% for field in fields %}
+		<h1> {{ field }} </h1>
+		<form action="javascript:filterTable()">
+			<label for="filter"> Filter Data: </label>
+			<input type="text" id="filter" name="filter">
+			<input type="submit" value="Submit"><br>
+		</form>
+		<table id="dbTable">
+		{% define data|returnitem:field as relData %}
+		{% define relData|returnitem:1 as header %}
+		{% define header|returnkeys as header %}
+		<tr>
+		{% for h in header %}
+			<th>{{ h }}</th>
+		{% endfor %}
+		</tr>
+		{% for item in relData %}
+			<tr> 
+				{% for h in header %}
+					<td>{{ item|returnitem:h }}</td>
+				{% endfor %}
+			</tr>
+		{% endfor %}
+		</table>
+	{% endfor %}
+{% endblock content %}

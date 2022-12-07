@@ -1,6 +1,7 @@
 #!/usr/bin/python
 import mysql.connector
 from os import listdir
+from sys import argv
 
 mydb = mysql.connector.connect(
   host="127.0.0.1",
@@ -10,9 +11,9 @@ mydb = mysql.connector.connect(
 
 mycursor = mydb.cursor()
 
-mycursor.execute("CREATE DATABASE IF NOT EXISTS nba")
+mycursor.execute("CREATE DATABASE IF NOT EXISTS " + argv[1])
 
-datapath = "/home/gene/Documents/AdvDatabases/project/basketballSQLFiles/"
+datapath = argv[2] 
 
 for sqlFile in listdir(datapath):
     #open formatted sql script and run all commands in the file
