@@ -20,6 +20,8 @@ if "django" in modules:
 else:
     downloadCommand = ["sudo","pip3","install","django"]
     subprocess.run(downloadCommand)
+    downloadCommand = ["sudo","pip3","install","django-extensions"]
+    subprocess.run(downloadCommand)
 sqlCliPy = ["sudo","pip3","install","mysqlclient"]
 subprocess.run(sqlCliPy)
 

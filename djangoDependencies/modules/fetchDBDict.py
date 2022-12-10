@@ -3,7 +3,6 @@ import mysql.connector
 from os import listdir
 from sys import argv
 import progressbar
-import djangoConversions 
 
 # This function will return the contents of a passed db as a dictionary.
 # @param database: name of the database to use
@@ -27,7 +26,17 @@ def fetch(*args):
 		if type(dbTables) == str:
 			dbTables = [dbTables]
 	else:
-		djangoTables = djangoConversions.djangoTables
+		djangoTables = ['auth_group',
+			'auth_group_permissions',
+			'auth_permission',
+			'auth_user',
+			'auth_user_groups',
+			'auth_user_user_permissions',
+			'django_admin_log',
+			'django_content_type',
+			'django_migrations',
+			'django_session'
+		]
 		mycursor.execute("show tables;")
 		dbTables = []
 		for x in mycursor:
