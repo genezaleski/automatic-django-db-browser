@@ -1,7 +1,9 @@
 {% load db_tags %}
+{% load static %}
 <!doctype html>
 <html>
 <head>
+	<link rel="stylesheet" href="{% static 'style.css' %}">
 	{% if title %}
 		<title> Django NBA - {{ title }}</title>
 	{% else %}

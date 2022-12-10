@@ -39,11 +39,17 @@ def connectDjangoToLocalhost(projectName,appName):
 	run(migrateCmd)
 
 def runDjango(projectName,appName):
+
+	makeMigrations = ["python", "./" + projectName + "/manage.py","makemigrations"]	
+	run(makeMigrations)
+	migrate = ["python", "./" + projectName + "/manage.py","migrate"]	
+	run(migrate)
 	runserver = ["python", "./" + projectName + "/manage.py","runserver"]	
-	Popen(migrateCmd)
+	Popen(runserver)
 
 	sleep(10)
 	openserver = ["firefox","http://127.0.0.1:8000/" + appName]	
+	Popen(openserver)
 	
 if __name__ == "__main__":
 	#Download Django and other packages with apt,pip, etc.

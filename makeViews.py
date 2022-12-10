@@ -90,8 +90,11 @@ run(["cp",runDirectory + "djangoDependencies/app_dependencies/style.css",static 
 
 #Copy Template and Template tags into app
 templates = runDirectory + projectName + "/" + appName + "/templates"
+if not os.path.isdir(templates):
+	os.mkdir(templates)
+	os.mkdir(templates + "/" + appName)
 templatetags = runDirectory + projectName + "/" + appName + "/templatetags"
-run(["cp","-r",runDirectory + "djangoDependencies/app_dependencies/app_templates",templates])
+run(["cp","-r",runDirectory + "djangoDependencies/app_dependencies/app_templates/default.html",templates + "/" + appName])
 run(["cp","-r",runDirectory + "djangoDependencies/app_dependencies/app_template_tags",templatetags])
 
 #Copy modules into the 

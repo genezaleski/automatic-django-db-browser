@@ -24,7 +24,7 @@ with open(appDependentSettings,"r") as appSettings:
 					secretKey = ""
 					for line2 in defaultSettings:
 						if "SECRET_KEY" in line2:
-							secretKey = line2.split("=")[-1].strip()
+							secretKey = line2.strip().split(" ")[-1].strip()
 					line = "SECRET_KEY = " + secretKey + "\n"
 				Settings.write(line)
 
