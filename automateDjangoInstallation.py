@@ -1,13 +1,10 @@
 #!/usr/bin/python
 
-from sys import argv
+from sys        import argv
 from subprocess import Popen,run
-from shutil import copyfile
-
-from . import download,insertDBData,makeModels
-
-def downloadDjangoAndDependencies():
-	download()
+from shutil     import copyfile
+from time       import sleep
+import os
 
 def createDjangoApp(projectName,appName):
 	#Create Django directory if it has not already been created
@@ -20,35 +17,68 @@ def createDjangoApp(projectName,appName):
 		firstTimeSetup = True
 		run(createDjango)
 
-	#Change to django area to run relevant functions
-	pwd = os.getcwd()
-	os.chdir(createDjango[-1])
-
-	manage = projectName + "/manage.py"
+	manage = "./" + projectName + "/manage.py"
 	createCmd = ["python",manage,"startapp",appName]
 
-	if isdir(createCmd[-1]):
-	    print("Local Django App has already been created!")
+	if os.path.isdir(createCmd[-1]):
+		print("Local Django App has already been created!")
 	else:
-	    run(createCmd)
-	    print("Created local Django App!")
+		run(createCmd)
+		run(["mv",appName,projectName + "/."])
+		print("Created local Django App!")
 
 def connectDjangoToLocalhost(projectName,appName):
-	#Write Settings.py file to connect Django to your Database
-
 	#Write models.py file to import database in django
 	makeModels(dbName)
 	copyfile("./models.py","./" + projectName + "/" + appName + "/models.py")	
 
 	#Migrate relevant packages in django on first time setup
-	migrateCmd = ["python","manage.py","makemigrations"]
+	migrateCmd = ["python","./" + projectName + "/manage.py","makemigrations"]
 	run(migrateCmd)
-	migrateCmd = ["python","manage.py","migrate"]
+	migrateCmd = ["python","./" + projectName + "/manage.py","migrate"]
 	run(migrateCmd)
+
+def runDjango(projectName,appName):
+	runserver = ["python", "./" + projectName + "/manage.py","runserver"]	
+	Popen(migrateCmd)
+
+	sleep(10)
+	openserver = ["firefox","http://127.0.0.1:8000/" + appName]	
 	
 if __name__ == "__main__":
 	#Download Django and other packages with apt,pip, etc.
-	downloadDjangoAndDependencies()
+	print("Downloading Django!")
+	cmd = ["python","download.py"]
+	run(cmd)
+
+	#Get Project and App name from user input
+	projectName = input("Please enter the name of your Django Project.")
+	projectName = projectName.strip()
+	appName     = input("Please enter the name of your Django App.")
+	appName     = appName.strip()
 
 	#Create a Django app for use with your db
 	createDjangoApp(projectName,appName)
+
+	#Determine if user needs to create new database from .sql files
+	# or specify a database name to use
+	newDB = input("Would you like to create a new database? [Y/N]")
+	if newDB.lower().strip() == "y":
+		dbPath = input("Please enter a path to .sql files for inserting data.")
+		insertDBData(appName,dbPath.strip())
+	else: 
+		dbName = input("Please input the name of the database you will be using.")
+
+	#Write settings file to reference your database + config files
+	cmd = ["python","writeApps.py",projectName,appName]
+	run(cmd)
+	cmd = ["python","makeSettings.py",projectName,appName]
+	run(cmd)
+
+	#Make views and apps for new project
+	cmd = ["python","makeViews.py",dbName,projectName,appName]
+	run(cmd)
+
+	#With apps,settings, and views configured, start the database
+	# open the home page
+	runDjango(projectName,appName)

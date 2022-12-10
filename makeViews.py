@@ -1,9 +1,10 @@
 #!/usr/bin/python
 import mysql.connector
-from os import listdir
-from sys import argv
-from shutil import copyfile
 import djangoConversions 
+import os
+from sys    import argv
+from shutil import copyfile
+from subprocess import run
 
 if len(argv) < 3:
 	print("USAGE: makeViews.py <Database Name> <Project Name> <App Name>")
@@ -71,7 +72,27 @@ with open("./app_urls.py","w") as appURLs:
 
 #With the relevant url and view files written,
 #copy the url files and view file to the django project for use. 
+run(["chmod","-R","777",projectName])
 projectUrlDest = "./" + projectName + "/" + projectName + "/urls.py"
 copyfile("./project_urls.py",projectUrlDest)
 appUrlDest = "./" + projectName + "/" + appName + "/urls.py"
 copyfile("./app_urls.py",appUrlDest)
+viewsDest = "./" + projectName + "/" + appName + "/views.py"
+copyfile("./views.py",viewsDest)
+
+runDirectory = os.path.realpath(__file__).replace("makeViews.py","")
+
+#Make a style directory for css files to be referenced by your views 
+static = runDirectory + projectName + "/" + appName + "/static"
+if not os.path.isdir(static):
+	os.mkdir(static)
+run(["cp",runDirectory + "djangoDependencies/app_dependencies/style.css",static + "/."])
+
+#Copy Template and Template tags into app
+templates = runDirectory + projectName + "/" + appName + "/templates"
+templatetags = runDirectory + projectName + "/" + appName + "/templatetags"
+run(["cp","-r",runDirectory + "djangoDependencies/app_dependencies/app_templates",templates])
+run(["cp","-r",runDirectory + "djangoDependencies/app_dependencies/app_template_tags",templatetags])
+
+#Copy modules into the 
+run(["cp","-r",runDirectory + "djangoDependencies/modules",runDirectory + projectName])

@@ -121,9 +121,17 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
+#from os.path import join,dirname
+#STATIC_ROOT = join(dirname(__file__),'static')
+
 STATIC_URL = "static/"
+
+#STATICFILES_DIRS = (
+#	join(dirname(__file__),'staticfiles')
+#)
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
