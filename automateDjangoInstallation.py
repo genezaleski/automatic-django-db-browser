@@ -58,9 +58,9 @@ if __name__ == "__main__":
 	run(cmd)
 
 	#Get Project and App name from user input
-	projectName = input("Please enter the name of your Django Project.")
+	projectName = input("Please enter the name of your Django Project:\n")
 	projectName = projectName.strip()
-	appName     = input("Please enter the name of your Django App.")
+	appName     = input("Please enter the name of your Django App:\n")
 	appName     = appName.strip()
 
 	#Create a Django app for use with your db
@@ -68,12 +68,13 @@ if __name__ == "__main__":
 
 	#Determine if user needs to create new database from .sql files
 	# or specify a database name to use
-	newDB = input("Would you like to create a new database? [Y/N]")
+	newDB = input("Would you like to create a new database? [Y/N]\n")
 	if newDB.lower().strip() == "y":
-		dbPath = input("Please enter a path to .sql files for inserting data.")
-		insertDBData(appName,dbPath.strip())
+		dbPath = input("Please enter a path to .sql files for inserting data:\n")
+		dbName = input("Please input the name of the database you will be using:\n")
+		run(["python","insertDBData.py",dbName,dbPath.strip()])
 	else: 
-		dbName = input("Please input the name of the database you will be using.")
+		dbName = input("Please input the name of the database you will be using:\n")
 
 	#Write settings file to reference your database + config files
 	cmd = ["python","writeApps.py",projectName,appName]
